@@ -1,4 +1,5 @@
 (function() {
+    "use strict";
     var gitrunner = module.exports;
     var spawn = require('child_process').spawn;
 
@@ -18,7 +19,7 @@
             callback(code, result);
 
         });
-    }
+    };
 
     gitrunner.gitStatus = function(folder, callback) {
         var result = {};
@@ -26,7 +27,7 @@
             if (code == 128) {
                 // Not a git repo - check subfolders
                 result.isRepo = false;
-            } else if (code == 0) {
+            } else if (code === 0) {
                 result.isRepo = true;
                 result.changedFiles = [];
                 var statusLines = statusOutput.split("\n");
@@ -37,17 +38,16 @@
                 }
             } else {
                 console.log(statusOutput);
-                throw ("Unexpected code " + code);
-                result.error = statusOutput;
+                throw new Error("Unexpected code " + code);
             }
             callback(result);
         });
-    }
+    };
 
     gitrunner.gitRemotes = function(folder, callback) {
         var result = {};
         gitrunner.runGit(folder, ['remote', '-v'], function(code, output) {
-            if (code == 0) {
+            if (code === 0) {
                 var lines = output.split("\n");
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i];
@@ -63,44 +63,45 @@
                 console.log(output);
                 throw ("Unexpected code " + code);
             }
-        })
+        });
 
-    }
+    };
 
     gitrunner.gitCurrentBranch = function(folder, callback) {
         gitrunner.runGit(folder, ['rev-parse', '--abbrev-ref', 'HEAD'], function(code, revOutput) {
-            if (code == 0) {
+            if (code === 0) {
                 callback(revOutput.substr(0, revOutput.indexOf("\n")));
             } else {
                 // new repo with no branches defined yet
                 callback();
             }
-        })
-    }
+        });
+    };
 
     gitrunner.gitCurrentTrackingBranch = function(folder, callback) {
         gitrunner.runGit(folder, ['rev-parse', '--symbolic-full-name', '--abbrev-ref', '@{u}'], function(code, revOutput) {
-            if (code == 0) {
+            if (code === 0) {
                 callback(revOutput.substr(0, revOutput.indexOf("\n")));
             } else {
                 // new repo with no branches defined yet
                 callback();
             }
-        })
-    }
+        });
+    };
 
 
     gitrunner.fullStatus = function(folder, callback) {
         // console.log("checking " + folder);
         gitrunner.gitStatus(folder, function(status) {
+            var result;
             if (!status.isRepo) {
-                var result = {
+                result = {
                     isRepo: false,
                     path: folder
                 };
                 callback(result);
             } else if (!status.error) {
-                var result = {
+                result = {
                     isRepo: true,
                     path: folder,
                     changedFiles: status.changedFiles
@@ -123,11 +124,11 @@
             } else {
                 // error
             }
-        })
+        });
 
-    }
-
-
+    };
 
 
-})()
+
+
+})();
