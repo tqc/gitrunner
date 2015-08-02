@@ -1,0 +1,48 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+//        "chondric",
+    ],
+    "rules":{
+        "eqeqeq": false,
+        "no-unused-vars": [2, {"vars": "all", "args":"none"}],
+        "indent": [
+            2,
+            4
+        ],
+        "quotes": false,
+        "linebreak-style": [
+            2,
+            "unix"
+        ],
+        "semi": [
+            2,
+            "always"
+        ],
+        "strict": [2, "never"],
+        //"dot-notation": [2, {"allowKeywords": false}],
+        
+        // allow one line ifs
+        "curly": false,
+        // newline at file end is optional
+        "eol-last": false,
+        // allow alerts
+        "no-alert": false,
+        // new-cap does not recognize decorators as new
+        "new-cap": false,
+        "no-labels": false,
+        
+    },
+    "globals": {
+        "Directive": true,
+        "Route": true,
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "ecmafeatures": {
+        "modules": true
+    }
+}

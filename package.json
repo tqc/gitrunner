@@ -10,8 +10,16 @@
     "bugs": {
         "url": "https://github.com/tqc/gitrunner/issues"
     },
+    "scripts": {
+        "lint": "eslint .",
+        "test": "mocha"
+    },
     "main": "./gitrunner",
     "dependencies": {},
+    "devDependencies": {
+        "chai": "*",
+        "mocha": "*"
+    },
     "engines": {
         "node": ">=0.8",
         "npm": "1"

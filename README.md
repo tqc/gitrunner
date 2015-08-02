@@ -1,5 +1,7 @@
 #GitRunner
 
+[ ![Codeship Status for tqc/gitrunner](https://codeship.com/projects/3f61d780-1afa-0133-1bbd-7e346f2e432c/status?branch=master)](https://codeship.com/projects/94425)
+
 Runs simple git commands and parses the result.
 
 ##Installation
