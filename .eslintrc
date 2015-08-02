@@ -4,7 +4,7 @@
 //        "chondric",
     ],
     "rules":{
-        "eqeqeq": false,
+        "eqeqeq": 0,
         "no-unused-vars": [2, {"vars": "all", "args":"none"}],
         "indent": [
             2,
@@ -23,14 +23,14 @@
         //"dot-notation": [2, {"allowKeywords": false}],
         
         // allow one line ifs
-        "curly": false,
+        "curly": 0,
         // newline at file end is optional
-        "eol-last": false,
+        "eol-last": 0,
         // allow alerts
-        "no-alert": false,
+        "no-alert": 0,
         // new-cap does not recognize decorators as new
-        "new-cap": false,
-        "no-labels": false,
+        "new-cap": 0,
+        "no-labels": 0,
         
     },
     "globals": {
