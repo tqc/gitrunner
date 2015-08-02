@@ -19,7 +19,7 @@
             2,
             "always"
         ],
-        "strict": [2, "never"],
+        "strict": 0, //[2, "never"],
         //"dot-notation": [2, {"allowKeywords": false}],
         
         // allow one line ifs
