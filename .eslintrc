@@ -10,7 +10,7 @@
             2,
             4
         ],
-        "quotes": false,
+        "quotes": 0,
         "linebreak-style": [
             2,
             "unix"
