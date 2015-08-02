@@ -11,13 +11,15 @@
         "url": "https://github.com/tqc/gitrunner/issues"
     },
     "scripts": {
-        "test": "eslint . && mocha"
+        "test": "eslint . && mocha",
+        "posttest": "publish"
     },
     "main": "./gitrunner",
     "dependencies": {},
     "devDependencies": {
         "eslint": "^1.0.0",
         "babel-eslint": "*",
+        "publish": "^0.5.0",
         "chai": "*",
         "mocha": "*"
     },
