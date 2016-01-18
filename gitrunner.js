@@ -140,7 +140,6 @@
         var result;
         callback = callback || noop;
         gitrunner.runGit(folder, ['rev-parse', 'HEAD'], function(code, revOutput) {
-            console.log(code+revOutput);
             if (code === 0) {
                 result = revOutput.substr(0, revOutput.indexOf("\n"));
                 callback(result);
