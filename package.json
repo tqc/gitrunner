@@ -1,6 +1,6 @@
 {
     "name": "gitrunner",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Runs simple git commands and parses the result",
     "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
     "repository": {
@@ -24,8 +24,7 @@
         "mocha": "*"
     },
     "engines": {
-        "node": ">=0.8",
-        "npm": "1"
+        "node": ">=4.0.0"
     },
     "licenses": [{
         "type": "MIT",

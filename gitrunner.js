@@ -1,24 +1,32 @@
 (function() {
     "use strict";
     var gitrunner = module.exports;
-    var spawn = require('child_process').spawn;
+    function noop() {}
+    gitrunner.runSync = false;
 
     gitrunner.runGit = function(cwd, params, callback) {
-        var result = "";
+        var cp = require('child_process');
+        var spawn = gitrunner.runSync ? cp.spawnSync : cp.spawn;
+
+
         var git = spawn('git', params, {
             cwd: cwd
         });
-        git.stdout.on('data', function(data) {
-            result += data;
-        });
-        git.stderr.on('data', function(data) {
-            result += data;
-        });
-        git.on('exit', function(code) {
 
-            callback(code, result);
-
-        });
+        if (gitrunner.runSync) {
+            callback(git.status, git.stdout+git.stderr);
+        }
+        else {
+            git.stdout.on('data', function(data) {
+                result += data;
+            });
+            git.stderr.on('data', function(data) {
+                result += data;
+            });
+            git.on('exit', function(code) {
+                callback(code, result);
+            });
+        }
     };
 
     gitrunner.gitStatus = function(folder, callback) {
@@ -129,14 +137,19 @@
     };
 
     gitrunner.currentHead = function(folder, callback) {
+        var result;
+        callback = callback || noop;
         gitrunner.runGit(folder, ['rev-parse', 'HEAD'], function(code, revOutput) {
+            console.log(code+revOutput);
             if (code === 0) {
-                callback(revOutput.substr(0, revOutput.indexOf("\n")));
+                result = revOutput.substr(0, revOutput.indexOf("\n"));
+                callback(result);
             } else {
                 // new repo with no branches defined yet or not a git repo at all
                 callback();
             }
         });
+        return result;
     };
 
 
