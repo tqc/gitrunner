@@ -128,6 +128,17 @@
 
     };
 
+    gitrunner.currentHead = function(folder, callback) {
+        gitrunner.runGit(folder, ['rev-parse', 'HEAD'], function(code, revOutput) {
+            if (code === 0) {
+                callback(revOutput.substr(0, revOutput.indexOf("\n")));
+            } else {
+                // new repo with no branches defined yet or not a git repo at all
+                callback();
+            }
+        });
+    };
+
 
 
 
