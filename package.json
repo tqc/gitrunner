@@ -11,8 +11,7 @@
         "url": "https://github.com/tqc/gitrunner/issues"
     },
     "scripts": {
-        "test": "eslint . && mocha",
-        "posttest": "publish"
+        "test": "eslint . && mocha"
     },
     "main": "./gitrunner",
     "dependencies": {},
