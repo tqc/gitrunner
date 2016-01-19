@@ -3,9 +3,9 @@
     var gitrunner = module.exports;
     function noop() {}
     gitrunner.runSync = false;
+    var cp = require('child_process');
 
     gitrunner.runGit = function(cwd, params, callback) {
-        var cp = require('child_process');
         var spawn = gitrunner.runSync ? cp.spawnSync : cp.spawn;
 
 
@@ -148,6 +148,39 @@
                 callback();
             }
         });
+        return result;
+    };
+
+    // Get all current refs from a remote. This needs to use ssh directly, as 
+    // git normally fetches as part of the same command.
+    // sshUrl must be in the form "git@github.com:user/repo.git "
+    gitrunner.getRemoteRefs = function(sshUrl, callback) {
+        var result = {};
+        callback = callback || noop;
+        var server = sshUrl.substr(0, sshUrl.indexOf(":"));
+        var repo = sshUrl.substr(sshUrl.indexOf(":")+1);
+        var ssh = cp.spawnSync("ssh", ["-x", server, "git-receive-pack '"+repo+"'"], {
+            input: "0000\n",
+            timeout: 10000,
+            encoding: "utf8"
+        });
+        console.log(ssh.status);
+        console.log(ssh.output);
+        if (ssh.status === 0) {
+            var lines = ssh.stdout.split("\n");
+            for(var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                console.log(line);
+                var m = line.match(/^[0-9a-f]{4}([0-9a-f]{40}) refs\/heads\/(\w*)/);
+                if (m) {
+                    result[m[2]] = m[1];
+                }
+            }            
+            callback(result);
+        } else {
+            // new repo with no branches defined yet or not a git repo at all
+            callback();
+        }
         return result;
     };
 
