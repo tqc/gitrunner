@@ -159,7 +159,7 @@
         callback = callback || noop;
         var server = sshUrl.substr(0, sshUrl.indexOf(":"));
         var repo = sshUrl.substr(sshUrl.indexOf(":")+1);
-        var ssh = cp.spawnSync("ssh", ["-x", server, "git-receive-pack '"+repo+"'"], {
+        var ssh = cp.spawnSync("ssh", ["-x", server, "git-upload-pack '"+repo+"'"], {
             input: "0000\n",
             timeout: 10000,
             encoding: "utf8"
