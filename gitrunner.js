@@ -17,6 +17,7 @@
             callback(git.status, git.stdout+git.stderr);
         }
         else {
+            var result = "";
             git.stdout.on('data', function(data) {
                 result += data;
             });
