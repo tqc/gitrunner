@@ -1,32 +1,40 @@
 {
-    "name": "gitrunner",
-    "version": "1.0.7",
-    "description": "Runs simple git commands and parses the result",
-    "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/tqc/gitrunner"
-    },
-    "bugs": {
-        "url": "https://github.com/tqc/gitrunner/issues"
-    },
-    "scripts": {
-        "test": "eslint . && mocha"
-    },
-    "main": "./gitrunner",
-    "dependencies": {},
-    "devDependencies": {
-        "eslint": "^1.0.0",
-        "babel-eslint": "*",
-        "publish": "^0.5.0",
-        "chai": "*",
-        "mocha": "*"
-    },
-    "engines": {
-        "node": "^4.2.2"
-    },
-    "licenses": [{
-        "type": "MIT",
-        "url": "https://github.com/tqc/gitrunner/raw/master/LICENSE"
-    }]
+  "name": "gitrunner",
+  "version": "1.1.0",
+  "description": "Runs simple git commands and parses the result",
+  "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tqc/gitrunner"
+  },
+  "bugs": {
+    "url": "https://github.com/tqc/gitrunner/issues"
+  },
+  "scripts": {
+    "test": "eslint . && mocha",
+    "compile": "babel src -d build"
+  },
+  "main": "./gitrunner",
+  "esnext:main": "./src",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.7.6",
+    "babel-eslint": "*",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
+    "chai": "*",
+    "eslint": "^1.0.0",
+    "eslint-config-defaults": "^9.0.0",
+    "mocha": "*",
+    "publish": "^0.5.0"
+  },
+  "engines": {
+    "node": "^4.2.2"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/tqc/gitrunner/raw/master/LICENSE"
+    }
+  ]
 }

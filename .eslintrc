@@ -1,10 +1,12 @@
 {
+    "extends": "defaults/configurations/eslint",
     "parser": "babel-eslint",
     "plugins": [
 //        "chondric",
     ],
     "rules":{
         "eqeqeq": 0,
+        "no-console": 0,
         "no-unused-vars": [2, {"vars": "all", "args":"none"}],
         "indent": [
             2,
