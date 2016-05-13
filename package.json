@@ -12,23 +12,24 @@
   },
   "scripts": {
     "test": "eslint . && mocha --compilers js:babel-core/register",
-    "compile": "babel src -d build"
+    "compile": "babel src -d dist"
   },
-  "main": "./build",
+  "main": "./dist",
   "esnext:main": "./src",
   "dependencies": {
     "async": "^1.5.2",
-    "eslint-config-tqc": "0.0.3"
+    "eslint-config-tqc": "0.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "babel-core": "^6.7.6",
     "babel-eslint": "^6.0.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
-    "chai": "*",
+    "chai": "^3.5.0",
     "eslint": "^2.7.0",
     "eslint-config-defaults": "^9.0.0",
-    "mocha": "*",
+    "fs-extra": "^0.30.0",
+    "mocha": "^2.4.5",
     "publish": "^0.5.0"
   },
   "engines": {

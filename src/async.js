@@ -10,7 +10,7 @@ export function run(folder, ops, options, callback) {
         function(op, next) {
             var params = [];
             if (Array.isArray(op.params)) { params = op.params; }
-            else if (typeof op.params == "function") { params = op.params(options); }
+            else if (typeof op.params == "function") { params = op.params(options); }            
             var spawnOptions = op.spawnOptions || {};
             spawnOptions.cwd = folder;
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
@@ -23,7 +23,12 @@ export function run(folder, ops, options, callback) {
             });
             git.on('exit', function(code) {
                 try {
-                    ops.process(result, code, output);
+                    if (op.process) {
+                        op.process(result, code, output);
+                    } else if (code != 0) {
+                        console.log(output);
+                        throw new Error("Unexpected exit code " + code);
+                    }
                     next();
                 }
                 catch(e) {
@@ -36,32 +41,32 @@ export function run(folder, ops, options, callback) {
         });
 }
 
+export function init(folder, callback) {
+    run(folder, [Operations.init], {}, callback);
+}
+
 export function status(folder, callback) {
     run(folder, [Operations.status], {}, callback);
 }
 
 export function remotes(folder, callback) {
-    run(folder, [Operations.remotes], {}, callback);
+    run(folder, [Operations.remotes], {}, (err, result) => callback(err, result.remotes));
 }
 
 export function currentBranch(folder, callback) {
-    run(folder, [Operations.currentBranch], {}, callback);
+    run(folder, [Operations.currentBranch], {}, (err, result) => callback(err, result.branch));
 }
 
 export function remoteBranch(folder, callback) {
-    run(folder, [Operations.remoteBranch], {}, callback);
+    run(folder, [Operations.remoteBranch], {}, (err, result) => callback(err, result.remoteBranch));
 }
 
 export function currentHead(folder, callback) {
-    run(folder, [Operations.status], {}, callback);
-}
-
-export function status(folder, callback) {
-    run(folder, [Operations.status], {}, callback);
+    run(folder, [Operations.currentHead], {}, (err, result) => callback(err, result.head));
 }
 
 export function remoteRefs(folder, sshUrl, callback) {
-    run(folder, [Operations.remoteRefs], {sshUrl: sshUrl}, callback);
+    run(folder, [Operations.remoteRefs], {sshUrl: sshUrl}, (err, result) => callback(err, result.remoteRefs));
 }
 
 export function fullStatus(folder, callback) {

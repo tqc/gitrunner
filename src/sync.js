@@ -12,9 +12,18 @@ export function run(folder, ops, options) {
         var spawnOptions = op.spawnOptions || {};
         spawnOptions.cwd = folder;
         var git = cp.spawnSync(op.exe || 'git', params, spawnOptions);
-        ops[i].process(result, git.status, git.stdout + git.stderr);
+        if (op.process) {
+            op.process(result, git.status, git.stdout + git.stderr);
+        } else if (git.status != 0) {
+            console.log(git.stdout + git.stderr);
+            throw new Error("Unexpected exit code " + git.status);
+        }
     }
     return result;
+}
+
+export function init(folder) {
+    return run(folder, [Operations.init], {});
 }
 
 export function status(folder) {
@@ -22,27 +31,23 @@ export function status(folder) {
 }
 
 export function remotes(folder) {
-    return run(folder, [Operations.remotes], {});
+    return run(folder, [Operations.remotes], {}).remotes;
 }
 
 export function currentBranch(folder) {
-    return run(folder, [Operations.currentBranch], {});
+    return run(folder, [Operations.currentBranch], {}).branch;
 }
 
 export function remoteBranch(folder) {
-    return run(folder, [Operations.remoteBranch], {});
+    return run(folder, [Operations.remoteBranch], {}).remoteBranch;
 }
 
 export function currentHead(folder) {
-    return run(folder, [Operations.status], {});
-}
-
-export function status(folder) {
-    return run(folder, [Operations.status], {});
+    return run(folder, [Operations.currentHead], {}).head;
 }
 
 export function remoteRefs(folder, sshUrl) {
-    return run(folder, [Operations.remoteRefs], {sshUrl: sshUrl});
+    return run(folder, [Operations.remoteRefs], {sshUrl: sshUrl}).remoteRefs;
 }
 
 export function fullStatus(folder, callback) {

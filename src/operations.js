@@ -1,3 +1,16 @@
+export var init = {
+    params: (options) => ["init"],
+    process: function(result, code, output) {
+        if (code === 0) {
+            // succeeded
+        } else {
+            console.log(output);
+            throw ("Unexpected code " + code);
+        }
+        return result;
+    }
+};
+
 export var status = {
     params: (options) => ['status', '--porcelain'],
     process: function(result, code, statusOutput) {
@@ -107,4 +120,4 @@ export var remoteRefs = {
 
         return result;
     }
-}
+};

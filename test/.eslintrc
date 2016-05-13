@@ -1,3 +1,11 @@
 {
-    "extends": "tqc/test"
+    "extends": "tqc/test",
+    globals: {
+        "should": true,
+        "assert": true,
+        "expect": true
+    },
+    env: {
+        "mocha": true
+    }
 }
