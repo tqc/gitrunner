@@ -11,11 +11,15 @@ Runs simple git commands and parses the result.
 
 ##Usage
 
-    var gitrunner = require("gitrunner");
+    var git = require("gitrunner").Sync;
+    var status = git.status(folder);
 
-    gitrunner.<command>(<path>,function(result) {})
+or
 
-### gitStatus
+    var git = require("gitrunner").Async;
+    var result = git.status(folder, function(err, result) {});
+
+### status
 
 Returns
 
@@ -24,7 +28,7 @@ Returns
         changedFiles: []
     }
 
-### gitRemotes
+### remotes
 
 Returns
 
@@ -32,13 +36,13 @@ Returns
         origin: 'git@github.com:tqc/gitrunner.git'
     }
 
-### gitCurrentBranch
+### currentBranch
 
 Returns
 
     "master"
 
-### gitCurrentTrackingBranch
+### remoteBranch
 
 Returns
 
@@ -61,8 +65,17 @@ A high level command that calls several of the lower level functions. Result is
         remoteBranch: 'origin/master'
     }
 
-### runGit
+### run
 
 For anything else, you can access git more directly:
+    
+    var op = {
+        params: ['remote', '-v'],
+        process: function(resultObject, statusCode, output) {
+            if (statusCode != 0) throw new Error("Something went wrong")
+            resultObject.something = output.substr(0,5);
+        }
+    }    
+    result = git.run(folder, op).something // sync
+    git.run(folder, op, undefined, function(err, resultObject) {}); // async
 
-    gitrunner.runGit(folder, ['remote', '-v'], function(statusCode, output) {})
