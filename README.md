@@ -19,7 +19,7 @@ or
     var git = require("gitrunner").Async;
     var result = git.status(folder, function(err, result) {});
 
-### status
+### status(folder)
 
 Returns
 
@@ -28,7 +28,7 @@ Returns
         changedFiles: []
     }
 
-### remotes
+### remotes(folder)
 
 Returns
 
@@ -36,17 +36,42 @@ Returns
         origin: 'git@github.com:tqc/gitrunner.git'
     }
 
-### currentBranch
+### currentBranch(folder)
 
 Returns
 
     "master"
 
-### remoteBranch
+### remoteBranch(folder)
 
 Returns
 
     "origin/master"
+
+
+### branches(folder)
+
+Returns
+
+    [{
+        name: "master",
+        sha: "ba97757cf0ed0ffb4735d79ef8d8c4e8952bf2c0",
+        message: "Commit message"
+    }]
+
+
+### branchNames(folder)
+
+Returns
+
+    ["master"]
+
+### tree(folder, treeref)
+
+Returns
+
+    {}
+
 
 ### fullStatus
 

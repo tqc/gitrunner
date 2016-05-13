@@ -50,6 +50,19 @@ export function remoteRefs(folder, sshUrl) {
     return run(folder, [Operations.remoteRefs], {sshUrl: sshUrl}).remoteRefs;
 }
 
+export function branches(folder) {
+    return run(folder, [Operations.branches], {}).branches;
+}
+
+export function branchNames(folder) {
+    return run(folder, [Operations.branchNames], {}).branches;
+}
+
+export function tree(folder, treeref) {
+    return run(folder, [Operations.tree], {treeref: treeref}).tree;
+}
+
+
 export function fullStatus(folder, callback) {
     var result = run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch], {});
     result.path = folder;

@@ -1,3 +1,5 @@
+import * as flat from "flat";
+
 export var init = {
     params: (options) => ["init"],
     process: function(result, code, output) {
@@ -121,3 +123,69 @@ export var remoteRefs = {
         return result;
     }
 };
+
+
+export var branchNames = {
+    params: ['branch', '--list'],
+    process: function(result, code, output) {
+        if (code != 0) throw new Error("Unexpected code " + code);
+        result.branches = [];
+        var reflines = output.split("\n") || [];
+        for (var i = 0; i < reflines.length; i++) {
+            if (!reflines[i]) continue;
+            branches.push(reflines[i].substr(2));
+        }
+    }
+};
+
+export var branches = {
+    params: ["branch", "-v", "--abbrev=40"],
+    process: function(result, code, output) {
+        if (code != 0) throw new Error("Unexpected code " + code);
+        result.branches = [];
+        var reflines = output.split("\n") || [];
+        for (var i = 0; i < reflines.length; i++) {
+            if (!reflines[i]) continue;
+            var m = (/..(\w*)\W+([0-9a-f]{40})\W+(.*)/gi).exec(reflines[i]);
+            if (!m) continue;
+            result.branches.push({
+                name: m[1],
+                sha: "commit:"+m[2],
+                message: m[3]
+            });
+        }
+    }
+};
+
+export var lstree = {
+    params: (options) => ["ls-tree", "-r", "-t", options.treeref],
+    process: function(result, code, output) {
+        if (code != 0) throw new Error("Unexpected code " + code);
+        var files = [];
+        var filehash = {};
+        var lslines = output.split("\n") || [];
+        for (var i = 0; i < lslines.length; i++) {
+            if (!lslines[i]) continue;
+            var file = {
+                permissions: lslines[i].substr(0, 6),
+                // todo: this will break if there is a submodule
+                type: lslines[i].substr(7, 4),
+                hash: lslines[i].substr(12, 40),
+                path: lslines[i].substr(53)
+            };
+            if (file.type == "tree") {
+                filehash[file.path + "/.treesha"] = file.type + ":" + file.hash;
+            } else {
+                filehash[file.path] = file.type + ":" + file.hash;
+            }
+
+            files.push(file);
+        }
+        result.tree = flat.unflatten(filehash, {
+            delimiter: "/"
+        });
+        //tree[".treesha"] = "tree:" + treeref;
+    }
+};
+
+
