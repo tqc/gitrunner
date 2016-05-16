@@ -2,13 +2,13 @@ import cp from "child_process";
 import * as Operations from "./operations";
 
 export function run(folder, ops, options) {
-    var result = {};
+    var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     for (var i = 0; i < ops.length; i++) {
         var params = [];
         var op = ops[i];
         if (Array.isArray(op.params)) { params = op.params; }
-        else if (typeof op.params == "function") { params = op.params(options); }
+        else if (typeof op.params == "function") { params = op.params(options, result); }
         var spawnOptions = op.spawnOptions || {};
         spawnOptions.cwd = folder;
         var git = cp.spawnSync(op.exe || 'git', params, spawnOptions);
@@ -59,7 +59,7 @@ export function branchNames(folder) {
 }
 
 export function tree(folder, treeref) {
-    return run(folder, [Operations.tree], {treeref: treeref}).tree;
+    return run(folder, [Operations.revParse, Operations.treeRef, Operations.tree], {ref: treeref}).tree;
 }
 
 

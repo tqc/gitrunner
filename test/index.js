@@ -48,6 +48,7 @@ describe("suite", function() {
         expect(result.isRepo).to.equal(true);
         expect(result.changedFiles).to.have.length(0);
     });
+    
     it("should get status for new repo async", function(done) {
         GitRunner.Async.status(global.testDir, function(err, result) {
             expect(err).to.not.exist;
@@ -56,4 +57,13 @@ describe("suite", function() {
             done();
         });
     });
+    
+    it.skip("should list tree", function() {
+        // todo: make this work on the build server
+        var tree = GitRunner.Sync.tree(process.cwd(), "master");
+        console.log(tree);
+        expect(tree).to.exist;
+    });
+
+
 });

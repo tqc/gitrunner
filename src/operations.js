@@ -1,5 +1,3 @@
-import * as flat from "flat";
-
 export var init = {
     params: (options) => ["init"],
     process: function(result, code, output) {
@@ -87,6 +85,28 @@ export var currentHead = {
     }
 };
 
+export var revParse = {
+    params: (options, result) => ['rev-parse', options.ref],
+    process: function(result, code, output) {
+        result.ref = output.substr(0, output.indexOf("\n"));
+        return result;
+    }
+};
+
+
+export var treeRef = {
+    params: (options, result) => ['show', "-q", "--format=%T", options.ref],
+    process: function(result, code, output) {
+        if (output.indexOf("tree") == 0) {
+            result.ref = result.ref;
+        }
+        else {
+            result.commitRef = result.ref;
+            result.treeRef = output.substr(0, output.indexOf("\n"));
+        }
+    }
+};
+
 // Get all current refs from a remote. This needs to use ssh directly, as 
 // git normally fetches as part of the same command.
 // sshUrl must be in the form "git@github.com:user/repo.git "
@@ -157,34 +177,45 @@ export var branches = {
     }
 };
 
-export var lstree = {
-    params: (options) => ["ls-tree", "-r", "-t", options.treeref],
+export var tree = {
+    params: (options) => ["ls-tree", "-r", "-t", options.treeRef],
     process: function(result, code, output) {
+        console.log(output);
         if (code != 0) throw new Error("Unexpected code " + code);
-        var files = [];
-        var filehash = {};
-        var lslines = output.split("\n") || [];
-        for (var i = 0; i < lslines.length; i++) {
-            if (!lslines[i]) continue;
-            var file = {
-                permissions: lslines[i].substr(0, 6),
-                // todo: this will break if there is a submodule
-                type: lslines[i].substr(7, 4),
-                hash: lslines[i].substr(12, 40),
-                path: lslines[i].substr(53)
-            };
-            if (file.type == "tree") {
-                filehash[file.path + "/.treesha"] = file.type + ":" + file.hash;
-            } else {
-                filehash[file.path] = file.type + ":" + file.hash;
-            }
 
-            files.push(file);
+        var lslines = output.split("\n") || [];
+        var i = 0;
+
+        result.tree = {
+            commit: result.commitRef,
+            hash: result.treeRef,
+            type: "tree",
+            path: "",
+            contents: {}
+        };
+
+        function updateTree(treeNode) {
+            while(i < lslines.length) {
+                var line = lslines[i];
+                if (!line) return;
+                
+                var file = {
+                    permissions: line.substr(0, 6),
+                    // todo: this will break if there is a submodule
+                    type: line.substr(7, 4),
+                    hash: line.substr(12, 40),
+                    path: line.substr(53)
+                };
+                file.name = file.path.substr(file.path.lastIndexOf("/")+1);
+                if (file.type == "tree") file.contents = {};
+                if (file.path.indexOf(treeNode.path) !== 0) return;
+                treeNode.contents[file.name] = file;
+                i++;
+                if (file.type == "tree") updateTree(file);
+            }
         }
-        result.tree = flat.unflatten(filehash, {
-            delimiter: "/"
-        });
-        //tree[".treesha"] = "tree:" + treeref;
+
+        updateTree(result.tree);
     }
 };
 
