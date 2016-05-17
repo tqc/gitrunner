@@ -14,9 +14,12 @@ export function run(folder, ops, options) {
         var git = cp.spawnSync(op.exe || 'git', params, spawnOptions);
         if (op.process) {
             op.process(result, git.status, git.stdout + git.stderr);
-        } else if (git.status != 0) {
-            console.log(git.stdout + git.stderr);
-            throw new Error("Unexpected exit code " + git.status);
+        } else {
+            result.output = git.stdout + git.stderr;
+            if (git.status != 0) {
+                console.log(git.stdout + git.stderr);            
+                throw new Error("Unexpected exit code " + git.status);
+            }
         }
     }
     return result;
@@ -56,6 +59,10 @@ export function branches(folder) {
 
 export function branchNames(folder) {
     return run(folder, [Operations.branchNames], {}).branches;
+}
+
+export function revParse(folder, ref) {
+    return run(folder, [Operations.revParse], {ref: ref}).ref;
 }
 
 export function tree(folder, treeref) {

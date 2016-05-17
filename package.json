@@ -1,6 +1,6 @@
 {
   "name": "gitrunner",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Runs simple git commands and parses the result",
   "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
   "repository": {

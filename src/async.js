@@ -77,6 +77,9 @@ export function branchNames(folder, callback) {
     run(folder, [Operations.branchNames], {}, (err, result) => callback(err, result.branches));
 }
 
+export function revParse(folder, ref, callback) {
+    run(folder, [Operations.revParse], {ref: ref}, (err, result) => callback(err, result.ref));
+}
 export function tree(folder, treeref, callback) {
     run(folder, [Operations.revParse, Operations.treeRef, Operations.tree], {ref: treeref}, (err, result) => callback(err, result.tree));
 }
