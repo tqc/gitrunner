@@ -73,6 +73,10 @@ export function branches(folder, callback) {
     run(folder, [Operations.branches], {}, (err, result) => callback(err, result.branches));
 }
 
+export function submodules(folder, callback) {
+    run(folder, [Operations.submodules], {}, (err, result) => callback(err, result.submodules));
+}
+
 export function branchNames(folder, callback) {
     run(folder, [Operations.branchNames], {}, (err, result) => callback(err, result.branches));
 }

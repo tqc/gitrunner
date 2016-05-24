@@ -177,6 +177,30 @@ export var branches = {
     }
 };
 
+export var submodules = {
+    params: ["submodule", "status"],
+    process: function(result, code, output) {
+        if (code != 0) throw new Error("Unexpected code " + code);
+        result.submodules = [];
+        var reflines = output.split("\n") || [];
+        for (var i = 0; i < reflines.length; i++) {
+            if (!reflines[i]) continue;
+            var m = (/(.)([0-9a-f]{40})\W+(\w*)\W+\((.*)\)/gi).exec(reflines[i]);
+            if (!m) continue;
+            var sm = {
+                name: m[3],
+                sha: "commit:"+m[2],
+                branch: m[4]
+            };
+            if (m[1] == "+") sm.status = "Changed";
+            else if (m[1] == "-") sm.status = "Uninitialized";
+            else if (m[1] == "U") sm.status = "Conflicted";
+            else sm.status = "OK";
+            result.submodules.push(sm);
+        }
+    }
+};
+
 export var tree = {
     params: (options) => ["ls-tree", "-r", "-t", options.treeRef],
     process: function(result, code, output) {

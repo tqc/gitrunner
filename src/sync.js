@@ -57,6 +57,10 @@ export function branches(folder) {
     return run(folder, [Operations.branches], {}).branches;
 }
 
+export function submodules(folder) {
+    return run(folder, [Operations.submodules], {}).submodules;
+}
+
 export function branchNames(folder) {
     return run(folder, [Operations.branchNames], {}).branches;
 }
