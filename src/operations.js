@@ -130,7 +130,7 @@ export var remoteRefs = {
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 console.log(line);
-                var m = line.match(/^[0-9a-f]{4}([0-9a-f]{40}) refs\/heads\/(\w*)/);
+                var m = line.match(/^[0-9a-f]{4}([0-9a-f]{40}) refs\/heads\/(\S*)/);
                 if (m) {
                     result.remoteRefs[m[2]] = m[1];
                 }
@@ -166,7 +166,7 @@ export var branches = {
         var reflines = output.split("\n") || [];
         for (var i = 0; i < reflines.length; i++) {
             if (!reflines[i]) continue;
-            var m = (/..(\w*)\W+([0-9a-f]{40})\W+(.*)/gi).exec(reflines[i]);
+            var m = (/..(\S*)\s+([0-9a-f]{40})\s+(.*)/gi).exec(reflines[i]);
             if (!m) continue;
             result.branches.push({
                 name: m[1],
@@ -185,7 +185,7 @@ export var submodules = {
         var reflines = output.split("\n") || [];
         for (var i = 0; i < reflines.length; i++) {
             if (!reflines[i]) continue;
-            var m = (/(.)([0-9a-f]{40})\W+(\w*)\W+\((.*)\)/gi).exec(reflines[i]);
+            var m = (/(.)([0-9a-f]{40})\s+(\S*)\s+\((.*)\)/gi).exec(reflines[i]);
             if (!m) continue;
             var sm = {
                 name: m[3],

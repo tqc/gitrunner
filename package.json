@@ -1,8 +1,9 @@
 {
   "name": "gitrunner",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Runs simple git commands and parses the result",
   "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tqc/gitrunner"
@@ -17,28 +18,20 @@
   "main": "./dist",
   "esnext:main": "./src",
   "dependencies": {
-    "async": "^1.5.2",
-    "eslint-config-tqc": "0.0.4"
+    "async": "2.0.0-rc.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-core": "^6.7.6",
-    "babel-eslint": "^6.0.2",
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.1",
+    "babel-eslint": "^6.0.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
     "chai": "^3.5.0",
-    "eslint": "^2.7.0",
-    "eslint-config-defaults": "^9.0.0",
+    "eslint": "^2.11.1",
+    "eslint-config-tqc": "0.0.4",
     "fs-extra": "^0.30.0",
-    "mocha": "^2.4.5",
-    "publish": "^0.5.0"
+    "mocha": "^2.4.5"
   },
   "engines": {
     "node": "^4.2.2"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/tqc/gitrunner/raw/master/LICENSE"
-    }
-  ]
+  }
 }
