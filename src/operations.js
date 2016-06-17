@@ -5,7 +5,7 @@ export var init = {
             // succeeded
         } else {
             console.log(output);
-            throw ("Unexpected code " + code);
+            throw new Error("Unexpected code " + code);
         }
         return result;
     }
@@ -47,11 +47,11 @@ export var remotes = {
                 var url = line.substr(line.indexOf("\t") + 1);
                 url = url.substr(0, url.indexOf(" "));
                 result.remotes[name] = url;
-            }            
+            }
         } else {
             // new repo with no branches defined yet
             console.log(output);
-            throw ("Unexpected code " + code);
+            throw new Error("Unexpected code " + code);
         }
         return result;
     }
@@ -107,7 +107,7 @@ export var treeRef = {
     }
 };
 
-// Get all current refs from a remote. This needs to use ssh directly, as 
+// Get all current refs from a remote. This needs to use ssh directly, as
 // git normally fetches as part of the same command.
 // sshUrl must be in the form "git@github.com:user/repo.git "
 export var remoteRefs = {
@@ -153,7 +153,7 @@ export var branchNames = {
         var reflines = output.split("\n") || [];
         for (var i = 0; i < reflines.length; i++) {
             if (!reflines[i]) continue;
-            branches.push(reflines[i].substr(2));
+            result.branches.push(reflines[i].substr(2));
         }
     }
 };
@@ -170,7 +170,7 @@ export var branches = {
             if (!m) continue;
             result.branches.push({
                 name: m[1],
-                sha: "commit:"+m[2],
+                sha: "commit:" + m[2],
                 message: m[3]
             });
         }
@@ -189,7 +189,7 @@ export var submodules = {
             if (!m) continue;
             var sm = {
                 name: m[3],
-                sha: "commit:"+m[2],
+                sha: "commit:" + m[2],
                 branch: m[4]
             };
             if (m[1] == "+") sm.status = "Changed";
@@ -219,10 +219,10 @@ export var tree = {
         };
 
         function updateTree(treeNode) {
-            while(i < lslines.length) {
+            while (i < lslines.length) {
                 var line = lslines[i];
                 if (!line) return;
-                
+
                 var file = {
                     permissions: line.substr(0, 6),
                     // todo: this will break if there is a submodule
@@ -230,7 +230,7 @@ export var tree = {
                     hash: line.substr(12, 40),
                     path: line.substr(53)
                 };
-                file.name = file.path.substr(file.path.lastIndexOf("/")+1);
+                file.name = file.path.substr(file.path.lastIndexOf("/") + 1);
                 if (file.type == "tree") file.contents = {};
                 if (file.path.indexOf(treeNode.path) !== 0) return;
                 treeNode.contents[file.name] = file;

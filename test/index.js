@@ -4,14 +4,14 @@ import * as fs from "fs-extra";
 import chai from 'chai';
 global.expect = chai.expect;
 
-// set up 
+// set up
 
 function generateUUID() {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
+        var r = (d + Math.random() * 16) % 16 | 0; // eslint-disable-line no-bitwise
         d = Math.floor(d / 16);
-        return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+        return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16); // eslint-disable-line no-bitwise
     });
     return uuid;
 }
@@ -36,7 +36,7 @@ after(function(done) {
     console.log("end test run");
 
     console.log("deleting test files");
-    
+
     fs.removeSync(global.testDir);
 
     done();
@@ -48,7 +48,7 @@ describe("suite", function() {
         expect(result.isRepo).to.equal(true);
         expect(result.changedFiles).to.have.length(0);
     });
-    
+
     it("should get status for new repo async", function(done) {
         GitRunner.Async.status(global.testDir, function(err, result) {
             expect(err).to.not.exist;
@@ -57,7 +57,7 @@ describe("suite", function() {
             done();
         });
     });
-    
+
     it.skip("should list tree", function() {
         // todo: make this work on the build server
         var tree = GitRunner.Sync.tree(process.cwd(), "master");

@@ -17,7 +17,7 @@ export function run(folder, ops, options) {
         } else {
             result.output = git.stdout + git.stderr;
             if (git.status != 0) {
-                console.log(git.stdout + git.stderr);            
+                console.log(git.stdout + git.stderr);
                 throw new Error("Unexpected exit code " + git.status);
             }
         }
@@ -77,5 +77,5 @@ export function tree(folder, treeref) {
 export function fullStatus(folder, callback) {
     var result = run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch], {});
     result.path = folder;
-    return result;    
+    return result;
 }

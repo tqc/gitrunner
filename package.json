@@ -1,6 +1,6 @@
 {
   "name": "gitrunner",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "description": "Runs simple git commands and parses the result",
   "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
   "license": "MIT",
@@ -12,13 +12,13 @@
     "url": "https://github.com/tqc/gitrunner/issues"
   },
   "scripts": {
-    "test": "eslint . && mocha --compilers js:babel-core/register",
+    "test": "eslint -v && eslint . && mocha --compilers js:babel-core/register",
     "compile": "babel src -d dist"
   },
   "main": "./dist",
   "esnext:main": "./src",
   "dependencies": {
-    "async": "2.0.0-rc.5"
+    "async": "2.0.0-rc.6"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
@@ -27,11 +27,11 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
     "chai": "^3.5.0",
     "eslint": "^2.11.1",
-    "eslint-config-tqc": "0.0.4",
+    "eslint-config-tqc": "^1.0.0",
     "fs-extra": "^0.30.0",
     "mocha": "^2.4.5"
   },
   "engines": {
-    "node": "^4.2.2"
+    "node": ">=4 < 7"
   }
 }

@@ -6,11 +6,11 @@ export function run(folder, ops, options, callback) {
     var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     async.eachSeries(
-        ops, 
+        ops,
         function(op, next) {
             var params = [];
             if (Array.isArray(op.params)) { params = op.params; }
-            else if (typeof op.params == "function") { params = op.params(options, result); }            
+            else if (typeof op.params == "function") { params = op.params(options, result); }
             var spawnOptions = op.spawnOptions || {};
             spawnOptions.cwd = folder;
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
@@ -31,10 +31,10 @@ export function run(folder, ops, options, callback) {
                     }
                     next();
                 }
-                catch(e) {
+                catch (e) {
                     next(e);
                 }
-            });            
+            });
         },
         function(err) {
             callback(err, result);
