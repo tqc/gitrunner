@@ -69,6 +69,10 @@ export function revParse(folder, ref) {
     return run(folder, [Operations.revParse], {ref: ref}).ref;
 }
 
+export function show(folder, ref) {
+    return run(folder, [Operations.show], {ref: ref}).contents;
+}
+
 export function tree(folder, treeref) {
     return run(folder, [Operations.revParse, Operations.treeRef, Operations.tree], {ref: treeref}).tree;
 }

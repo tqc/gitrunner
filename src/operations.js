@@ -93,6 +93,14 @@ export var revParse = {
     }
 };
 
+export var show = {
+    params: (options, result) => ['show', options.ref],
+    process: function(result, code, output) {
+        result.contents = output;
+        return result;
+    }
+};
+
 
 export var treeRef = {
     params: (options, result) => ['show', "-q", "--format=%T", options.ref],
@@ -204,7 +212,6 @@ export var submodules = {
 export var tree = {
     params: (options) => ["ls-tree", "-r", "-t", options.treeRef],
     process: function(result, code, output) {
-        console.log(output);
         if (code != 0) throw new Error("Unexpected code " + code);
 
         var lslines = output.split("\n") || [];
