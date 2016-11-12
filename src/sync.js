@@ -1,7 +1,7 @@
 import cp from "child_process";
 import * as Operations from "./operations";
 
-export function run(folder, ops, options) {
+export function run(folderOrSpawnOptions, ops, options) {
     var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     for (var i = 0; i < ops.length; i++) {
@@ -9,8 +9,20 @@ export function run(folder, ops, options) {
         var op = ops[i];
         if (Array.isArray(op.params)) { params = op.params; }
         else if (typeof op.params == "function") { params = op.params(options, result); }
-        var spawnOptions = op.spawnOptions || {};
-        spawnOptions.cwd = folder;
+
+        var spawnOptions;
+        if (typeof folderOrSpawnOptions == "string") {
+            spawnOptions = {
+                cwd: folderOrSpawnOptions
+            };
+        } else {
+            spawnOptions = Object.assign({}, folderOrSpawnOptions);
+        }
+
+        if (options.env) {
+            spawnOptions.env = Object.assign({}, spawnOptions.env || {}, options.env);
+        }
+
         var git = cp.spawnSync(op.exe || 'git', params, spawnOptions);
         if (op.process) {
             op.process(result, git.status, git.stdout + git.stderr);

@@ -2,7 +2,7 @@ import cp from "child_process";
 import async from "async";
 import * as Operations from "./operations";
 
-export function run(folder, ops, options, callback) {
+export function run(folderOrSpawnOptions, ops, options, callback) {
     var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     async.eachSeries(
@@ -11,8 +11,20 @@ export function run(folder, ops, options, callback) {
             var params = [];
             if (Array.isArray(op.params)) { params = op.params; }
             else if (typeof op.params == "function") { params = op.params(options, result); }
-            var spawnOptions = op.spawnOptions || {};
-            spawnOptions.cwd = folder;
+
+            var spawnOptions;
+            if (typeof folderOrSpawnOptions == "string") {
+                spawnOptions = {
+                    cwd: folderOrSpawnOptions
+                };
+            } else {
+                spawnOptions = Object.assign({}, folderOrSpawnOptions);
+            }
+
+            if (options.env) {
+                spawnOptions.env = Object.assign({}, spawnOptions.env || {}, options.env);
+            }
+
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
             var output = "";
             git.stdout.on('data', function(data) {
