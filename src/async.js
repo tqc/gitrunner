@@ -21,6 +21,9 @@ export function run(folder, ops, options, callback) {
             git.stderr.on('data', function(data) {
                 output += data;
             });
+            if (op.provideInput) {
+                op.provideInput(git.stdin);
+            }
             git.on('exit', function(code) {
                 try {
                     if (op.process) {
@@ -29,7 +32,7 @@ export function run(folder, ops, options, callback) {
                         console.log(output);
                         throw new Error("Unexpected exit code " + code);
                     }
-                    next();
+                    setTimeout(next, 0);
                 }
                 catch (e) {
                     next(e);

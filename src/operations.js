@@ -101,7 +101,6 @@ export var show = {
     }
 };
 
-
 export var treeRef = {
     params: (options, result) => ['show', "-q", "--format=%T", options.ref],
     process: function(result, code, output) {
