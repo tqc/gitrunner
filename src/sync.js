@@ -2,6 +2,7 @@ import cp from "child_process";
 import * as Operations from "./operations";
 
 export function run(folderOrSpawnOptions, ops, options) {
+    options = options || {};
     var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     for (var i = 0; i < ops.length; i++) {

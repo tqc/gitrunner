@@ -3,6 +3,7 @@ import async from "async";
 import * as Operations from "./operations";
 
 export function run(folderOrSpawnOptions, ops, options, callback) {
+    options = options || {};
     var result = options || {};
     if (!Array.isArray(ops)) ops = [ops];
     async.eachSeries(
@@ -39,6 +40,7 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
             git.on('exit', function(code) {
                 try {
                     if (op.process) {
+                        if (code != 0) console.log(output);
                         op.process(result, code, output);
                     } else if (code != 0) {
                         console.log(output);
