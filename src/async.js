@@ -25,20 +25,23 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
             if (options.env) {
                 spawnOptions.env = Object.assign({}, spawnOptions.env || {}, options.env);
             }
-
+            console.log(spawnOptions);
+            var buf = Buffer.alloc(0);
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
-            var output = "";
+
             git.stdout.on('data', function(data) {
-                output += data;
+                if (typeof data == "string") buf.write(data);
+                else buf = Buffer.concat([buf, data]);
             });
             git.stderr.on('data', function(data) {
-                output += data;
+               // output += data;
             });
             if (op.provideInput) {
                 op.provideInput(git.stdin);
             }
             git.on('exit', function(code) {
                 try {
+                    var output = spawnOptions.encoding == "binary" ? buf : buf.toString('utf8');
                     if (code != 0 && (op.requireZeroExitCode || !op.process)) {
                         console.log(output);
                         throw new Error("Unexpected exit code " + code);
