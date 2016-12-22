@@ -25,7 +25,6 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
             if (options.env) {
                 spawnOptions.env = Object.assign({}, spawnOptions.env || {}, options.env);
             }
-            console.log(spawnOptions);
             var buf = Buffer.alloc(0);
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
 
