@@ -114,7 +114,7 @@ export function tree(folder, treeref, callback) {
 }
 
 export function fullStatus(folder, callback) {
-    run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch], {}, function(err, result) {
+    run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch, Operations.unpushedCommits], {}, function(err, result) {
         result.path = folder;
         callback(err, result);
     });

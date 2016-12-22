@@ -34,6 +34,23 @@ export var status = {
     }
 };
 
+export var unpushedCommits = {
+    params: (options, result) => ['rev-list', (options.branch || result.branch), '^' + (options.remoteBranch || result.remoteBranch)],
+    process: function(result, code, statusOutput) {
+        result.unpushedCommits = [];
+        if (code === 0) {
+            for (var line of statusOutput.split("\n")) {
+                if (!line) continue;
+                result.unpushedCommits.push(line.substr(3));
+            }
+        } else {
+            // most likely no branch found by previous operation - ignore
+        }
+        return result;
+    }
+};
+
+
 export var remotes = {
     params: (options) => ['remote', '-v'],
     process: function(result, code, output) {
@@ -72,7 +89,11 @@ export var currentBranch = {
 export var remoteBranch = {
     params: (options) => ['rev-parse', '--symbolic-full-name', '--abbrev-ref', '@{u}'],
     process: function(result, code, output) {
-        result.remoteBranch = output.substr(0, output.indexOf("\n"));
+        if (code == 0) {
+            result.remoteBranch = output.substr(0, output.indexOf("\n"));
+        } else {
+            // non-zero likely just means there is no tracking branch - do nothing
+        }
         return result;
     }
 };

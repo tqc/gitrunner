@@ -93,7 +93,7 @@ export function tree(folder, treeref) {
 
 
 export function fullStatus(folder, callback) {
-    var result = run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch], {});
+    var result = run(folder, [Operations.status, Operations.currentBranch, Operations.remoteBranch, Operations.unpushedCommits], {});
     result.path = folder;
     return result;
 }
