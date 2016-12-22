@@ -210,8 +210,8 @@ export var submodules = {
 
 export var tree = {
     params: (options) => ["ls-tree", "-r", "-t", options.treeRef],
+    requireZeroExitCode: true,
     process: function(result, code, output) {
-        if (code != 0) throw new Error("Unexpected code " + code);
 
         var lslines = output.split("\n") || [];
         var i = 0;

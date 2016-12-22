@@ -1,6 +1,6 @@
 {
   "name": "gitrunner",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Runs simple git commands and parses the result",
   "author": "Tom Clarkson <tom@orangeguava.com> (http://tqclarkson.com)",
   "license": "MIT",
@@ -18,20 +18,21 @@
   "main": "./dist",
   "esnext:main": "./src",
   "dependencies": {
-    "async": "2.0.0-rc.6"
+    "async": "^2.1.4"
   },
   "devDependencies": {
-    "babel-cli": "^6.9.0",
-    "babel-core": "^6.9.1",
-    "babel-eslint": "^6.0.4",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
     "chai": "^3.5.0",
-    "eslint": "^2.11.1",
-    "eslint-config-tqc": "^1.0.0",
-    "fs-extra": "^0.30.0",
-    "mocha": "^2.4.5"
+    "eslint": "^3.12.2",
+    "eslint-config-tqc": "^1.0.9",
+    "fs-extra": "^1.0.0",
+    "mocha": "^3.2.0"
   },
   "engines": {
-    "node": ">=4 < 7"
+    "node": "^6"
   }
 }

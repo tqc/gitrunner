@@ -25,14 +25,15 @@ export function run(folderOrSpawnOptions, ops, options) {
         }
 
         var git = cp.spawnSync(op.exe || 'git', params, spawnOptions);
+
+        if (git.status != 0 && (op.requireZeroExitCode || !op.process)) {
+            console.log(git.stdout + git.stderr);
+            throw new Error("Unexpected exit code " + git.status);
+        }
         if (op.process) {
             op.process(result, git.status, git.stdout + git.stderr);
         } else {
             result.output = git.stdout + git.stderr;
-            if (git.status != 0) {
-                console.log(git.stdout + git.stderr);
-                throw new Error("Unexpected exit code " + git.status);
-            }
         }
     }
     return result;

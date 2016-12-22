@@ -39,12 +39,15 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
             }
             git.on('exit', function(code) {
                 try {
-                    if (op.process) {
-                        if (code != 0) console.log(output);
-                        op.process(result, code, output);
-                    } else if (code != 0) {
+                    if (code != 0 && (op.requireZeroExitCode || !op.process)) {
                         console.log(output);
                         throw new Error("Unexpected exit code " + code);
+                    }
+                    if (op.process) {
+                        op.process(result, code, output);
+                    }
+                    else {
+                        result.output = output;
                     }
                     setTimeout(next, 0);
                 }
