@@ -22,10 +22,13 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
                 spawnOptions = Object.assign({}, folderOrSpawnOptions);
             }
 
+
             if (options.env) {
                 spawnOptions.env = Object.assign({}, spawnOptions.env || {}, options.env);
             }
             var buf = Buffer.alloc(0);
+            var errbuf = Buffer.alloc(0);
+
             var git = cp.spawn(op.exe || 'git', params, spawnOptions);
 
             git.stdout.on('data', function(data) {
@@ -33,23 +36,27 @@ export function run(folderOrSpawnOptions, ops, options, callback) {
                 else buf = Buffer.concat([buf, data]);
             });
             git.stderr.on('data', function(data) {
-               // output += data;
+                if (typeof data == "string") errbuf.write(data);
+                else errbuf = Buffer.concat([buf, data]);
             });
             if (op.provideInput) {
                 op.provideInput(git.stdin);
             }
-            git.on('exit', function(code) {
+            git.on('close', function(code) {
                 try {
                     var output = spawnOptions.encoding == "binary" ? buf : buf.toString('utf8');
+                    var stderr = errbuf.toString('utf8');
                     if (code != 0 && (op.requireZeroExitCode || !op.process)) {
                         console.log(output);
+                        console.log(stderr);
                         throw new Error("Unexpected exit code " + code);
                     }
                     if (op.process) {
-                        op.process(result, code, output);
+                        op.process(result, code, output, stderr);
                     }
                     else {
                         result.output = output;
+                        result.stderr = stderr;
                     }
                     setTimeout(next, 0);
                 }

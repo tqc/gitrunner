@@ -100,6 +100,7 @@ export var remoteBranch = {
 
 export var currentHead = {
     params: (options) => ['rev-parse', 'HEAD'],
+    requireZeroExitCode: true,
     process: function(result, code, output) {
         result.head = output.substr(0, output.indexOf("\n"));
         return result;
@@ -108,7 +109,11 @@ export var currentHead = {
 
 export var revParse = {
     params: (options, result) => ['rev-parse', options.ref],
+    requireZeroExitCode: true,
     process: function(result, code, output) {
+        console.log(result);
+        console.log(code);
+        console.log(output);
         result.ref = output.substr(0, output.indexOf("\n"));
         return result;
     }
