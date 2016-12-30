@@ -116,6 +116,7 @@ export var revParse = {
 
 export var show = {
     params: (options, result) => ['show', options.ref],
+    requireZeroExitCode: true,
     process: function(result, code, output) {
         result.contents = output;
         return result;
