@@ -111,9 +111,6 @@ export var revParse = {
     params: (options, result) => ['rev-parse', options.ref],
     requireZeroExitCode: true,
     process: function(result, code, output) {
-        console.log(result);
-        console.log(code);
-        console.log(output);
         result.ref = output.substr(0, output.indexOf("\n"));
         return result;
     }
@@ -132,7 +129,7 @@ export var treeRef = {
     params: (options, result) => ['show', "-q", "--format=%T", options.ref],
     process: function(result, code, output) {
         if (output.indexOf("tree") == 0) {
-            result.ref = result.ref;
+            result.treeRef = result.ref;
         }
         else {
             result.commitRef = result.ref;
