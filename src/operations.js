@@ -233,7 +233,7 @@ export var submodules = {
 };
 
 export var tree = {
-    params: (options) => ["ls-tree", "-r", "-t", options.treeRef],
+    params: (options) => ["ls-tree", "-r", "-t", "-l", options.treeRef],
     requireZeroExitCode: true,
     process: function(result, code, output) {
 
@@ -253,19 +253,31 @@ export var tree = {
                 var line = lslines[i];
                 if (!line) return;
 
+                let m = line.match(/(\d{6}) (tree|blob|commit) ([0-9a-f]{40})\s+(((\d+)|-)[ \t]+)?(((.*)\/)?(.*))/);
+                if (!m) {
+                    throw new Error("Unexpected ls-tree output format: " + line);
+                }
+
+                var parentPath = m[9] || "";
+                if (parentPath != treeNode.path) return;
+
                 var file = {
-                    permissions: line.substr(0, 6),
-                    // todo: this will break if there is a submodule
-                    type: line.substr(7, 4),
-                    hash: line.substr(12, 40),
-                    path: line.substr(53)
+                    permissions: m[1],
+                    type: m[2],
+                    hash: m[3],
+                    path: m[7],
+                    name: m[10]
                 };
-                file.name = file.path.substr(file.path.lastIndexOf("/") + 1);
-                if (file.type == "tree") file.contents = {};
-                if (file.path.indexOf(treeNode.path) !== 0) return;
+
+                if (m[6]) file.size = parseInt(m[6]);
+
                 treeNode.contents[file.name] = file;
                 i++;
-                if (file.type == "tree") updateTree(file);
+
+                if (file.type == "tree") {
+                    file.contents = {};
+                    updateTree(file);
+                }
             }
         }
 

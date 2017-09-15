@@ -58,10 +58,10 @@ describe("suite", function() {
         });
     });
 
-    it.skip("should list tree", function() {
+    it("should list tree", function() {
         // todo: make this work on the build server
         var tree = GitRunner.Sync.tree(process.cwd(), "master");
-        console.log(tree);
+        console.log(JSON.stringify(tree, null, 4));
         expect(tree).to.exist;
     });
 
