@@ -128,10 +128,15 @@ export var show = {
 export var treeRef = {
     params: (options, result) => ['show', "-q", "--format=%T", options.ref],
     process: function(result, code, output) {
-        if (output.indexOf("tree") == 0) {
+        let m = output.match(/^tree [0-9a-f]{40}\n/);
+
+        if (m) {
             result.treeRef = result.ref;
         }
         else {
+            let m2 = output.match(/^[0-9a-f]{40}\n$/);
+            if (!m2) throw new Error("Tried to read blob " + result.ref + " as a tree");
+
             result.commitRef = result.ref;
             result.treeRef = output.substr(0, output.indexOf("\n"));
         }
@@ -234,9 +239,11 @@ export var submodules = {
 
 export var tree = {
     params: (options) => ["ls-tree", "-r", "-t", "-l", options.treeRef],
-    requireZeroExitCode: true,
+    requireZeroExitCode: false,
     process: function(result, code, output) {
-
+        if (code != 0) {
+            throw new Error("Unexpected exit code running ls-tree on " + result.treeRef);
+        }
         var lslines = output.split("\n") || [];
         var i = 0;
 
